@@ -1,6 +1,6 @@
 # MiniFlow Architecture
 
-class Node(object):
+class Node(object): # same as class Node:
     def __init__(self, inbound_nodes=[]):
         """
         Two lists: one to store references to the inbound nodes,
@@ -24,14 +24,19 @@ class Node(object):
 
 class Input(Node):
     def __init__(self):
-        Node.__init__(self)
+        Node.__init__(self) # same as super.__init__(self)
 
     def forward(self, value=None):
         if value is not None:
             self.value = value
 
 class Add(Node):
-    def __init__(self):
-        Node.__init__(self, [x, y])
+    def __init__(self, x, y):
+        Node.__init__(self, [x, y]) # same as super.__init__(self, [x, y])
 
     def forward(self):
+
+x, y = Input(), Input()
+add = Add(x, y)
+feed_dict = {x: 10, y: 20}
+stored_nodes = topological_sort(feed_dict=feed_dict)
