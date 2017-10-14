@@ -1,6 +1,6 @@
 # MiniFlow Architecture
 
-class Node(object): # same as class Node:
+class Node:
     def __init__(self, inbound_nodes=[]):
         """
         Two lists: one to store references to the inbound nodes,
@@ -24,7 +24,7 @@ class Node(object): # same as class Node:
 
 class Input(Node):
     def __init__(self):
-        Node.__init__(self) # same as super.__init__(self)
+        super.__init__(self)
 
     def forward(self, value=None):
         if value is not None:
@@ -32,12 +32,20 @@ class Input(Node):
 
 class Add(Node):
     def __init__(self, x, y):
-        Node.__init__(self, [x, y]) # same as super.__init__(self, [x, y])
+        super.__init__(self, [x, y])
 
     def forward(self):
         x_value = self.inbound_nodes[0].value
         y_value = self.inbound_nodes[1].value
         self.value = x_value + y_value
+
+class Linear(Node):
+    def __init__(self, inputs, weights, bias):
+        super.__init__(self, [inputs, weights, bias])
+
+    def forward(self):
+
+        pass
 
 def topological_sort(feed_dict):
     """
@@ -80,7 +88,7 @@ def topological_sort(feed_dict):
                 S.add(m)
     return L
 
-def forward_pass(output_nodes, sorted_nodes):
+def forward_pass(output_node, sorted_nodes):
     """
     Performs a forward pass through a list of sorted nodes.
 
@@ -95,4 +103,4 @@ def forward_pass(output_nodes, sorted_nodes):
     for n in sorted_nodes:
         n.forward()
 
-    return output_nodes.value
+    return output_node.value
